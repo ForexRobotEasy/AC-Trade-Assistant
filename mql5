@@ -1,0 +1,79 @@
+
+//+------------------------------------------------------------------+
+//|                                                    AC Trade Assistant |
+//|                                      https://www.forexroboteasy.com |
+//|                                                             Forex Robot Easy Team |
+//+------------------------------------------------------------------+
+
+// Define input parameters
+input double RiskPercent = 1.0; // Risk percentage per trade
+input int FixedLots = 0; // Fixed lot size per trade
+
+// Define order types
+enum OrderType
+{
+    ORDER_TYPE_BUY,
+    ORDER_TYPE_SELL
+};
+
+//+------------------------------------------------------------------+
+//|                                                   AC Trade Assistant |
+//|                                      https://www.forexroboteasy.com |
+//|                                                             Forex Robot Easy Team |
+//+------------------------------------------------------------------+
+
+// Function to calculate order volume based on risk percent
+double CalculateVolume(double accountBalance, double stopLoss, double riskPercent)
+{
+    double volume = accountBalance * riskPercent / 100 / stopLoss;
+    return NormalizeDouble(volume, 2);
+}
+
+// Function to place market order
+bool PlaceMarketOrder(string symbol, OrderType orderType, double volume)
+{
+    // Place market order logic goes here
+    return true;
+}
+
+// Function to place pending order
+bool PlacePendingOrder(string symbol, OrderType orderType, double volume, double price)
+{
+    // Place pending order logic goes here
+    return true;
+}
+
+//+------------------------------------------------------------------+
+//|                                                      Start Program |
+//+------------------------------------------------------------------+
+
+void OnStart()
+{
+    // Get account balance
+    double accountBalance = AccountInfoDouble(ACCOUNT_BALANCE);
+
+    // Get current market price
+    double marketPrice = SymbolInfoDouble(Symbol(), SYMBOL_ASK);
+
+    // Calculate stop loss based on risk percent
+    double stopLoss = marketPrice * RiskPercent / 100;
+
+    // Calculate order volume based on risk percent
+    double orderVolume = CalculateVolume(accountBalance, stopLoss, RiskPercent);
+
+    // Place market order
+    bool marketOrderPlaced = PlaceMarketOrder(Symbol(), ORDER_TYPE_BUY, orderVolume);
+
+    // Place pending order
+    bool pendingOrderPlaced = PlacePendingOrder(Symbol(), ORDER_TYPE_SELL, orderVolume, marketPrice);
+
+    // Check if orders are successfully placed
+    if (marketOrderPlaced && pendingOrderPlaced)
+    {
+        Print('Orders placed successfully.');
+    }
+    else
+    {
+        Print('Failed to place orders.');
+    }
+}
